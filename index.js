@@ -54,6 +54,16 @@ app.put('/api/students/:id',(req,res)=>{
            
 });
 
-
+app.delete('/api/students/:id',(req,res)=>{
+    let vald_res = Joi.validate(req.params, validation_id_schema);
+    if(vald_res.error)
+        return res.status(400).send(vald_res.error.details[0].message)
+    let student = students.find(s => s.id === parseInt(req.params.id))
+    if(!student)
+        return res.status(404).send('Student with this id is not found');
+    students = students.filter(s => s.id !== parseInt(req.params.id))
+    res.send(student)
+           
+});
 
 app.listen(port,()=> console.log(`Server running on ${port}...`));
